@@ -2,7 +2,7 @@ my @sArr = "cat", "dog", "dog", "dog", "fish", "monkey", "monkey", "chair", "sto
 my @tArr = "katt", "hund", "bikkje", "sjefer", "fish", "ape", "apekatt", "stol", "stol";
 my %hash;
 
-# Source incon
+# Find source incon
 loop (my $i=0;$i < @sArr.elems; $i++){
     loop (my $j=0;$j < @sArr.elems; $j++){
        # not same item && strlen same && identical text content
@@ -15,7 +15,7 @@ loop (my $i=0;$i < @sArr.elems; $i++){
            }
        }
     }
-}
+} # Output: 1 => 3, 2 => 3, 5 => 6
 say "";
 .say for @sArr;
 say "";
@@ -23,12 +23,20 @@ say "";
 say "\nTarget array indexes that are inconsistent (equal source)";
 .say for %hash;
 
-my @dupArr;
-my $tmpStr;
+# TODO:
+
+#1. loop hash twice
+#2. if values are equal for both loops, and if key names are not identical:
+#3.      push array of all unique values and keys to array
+#4. when above looping is done:
+#        push array of the value and the key to array
+
+my @outArr;
 for keys %hash -> $key1 {
-   @tmpArr = "";
    for keys %hash -> $key2 {
-      @tmparr ~= $key1;
+      if %hash{$key1} ~~ %hash{$key2} {
+         @outArr.push($key1 ~ $key2 ~ %hash{$key1} ~ %hash{$key2});
+      }
    }
-   say @tmpArr;
 }
+.say for @outArr;
