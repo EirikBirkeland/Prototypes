@@ -1,5 +1,5 @@
-my @sArr = "cat", "dog", "dog", "dog", "fish", "monkey", "monkey", "chair", "stool";
-my @tArr = "katt", "hund", "bikkje", "sjefer", "fish", "ape", "apekatt", "stol", "stol";
+my @sArr = "cat", "dog", "dog", "dog", "dog", "fish", "monkey", "monkey", "chair", "stool";
+my @tArr = "katt", "hund", "bikkje", "sjefer", "puddel", "fish", "ape", "apekatt", "stol", "stol";
 my %hash;
 
 sub find_incon (@arr1, @arr2) {
@@ -20,9 +20,10 @@ sub find_incon (@arr1, @arr2) {
    } 
    my @outArr;
    # Extract related key pairs
+   say %hash.perl;
    for keys %hash -> $key1 {
       for keys %hash -> $key2 {
-         if %hash{$key1} ~~ %hash{$key2} && $key1 !~~ $key2 {
+         if %hash{$key1} == %hash{$key2} && $key1 ne $key2 {
             my $tmpStr = $key1 ~ $key2 ~ %hash{$key1} ~ %hash{$key2};
             $tmpStr = $tmpStr.split("").unique.join("");
             @outArr.push($tmpStr);
@@ -45,7 +46,7 @@ sub find_incon (@arr1, @arr2) {
 my @target_incon = find_incon(@sArr, @tArr);
 "Indexes $_ in tArr are inconsistent with source equivalent".say for @target_incon;
 say @target_incon.perl;
-
+say "\n";
 my @source_incon = find_incon(@tArr, @sArr);
 "Indexes $_ in sArr are inconsistent with target equivalent".say for @source_incon;
 say @source_incon.perl;
