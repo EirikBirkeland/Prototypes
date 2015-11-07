@@ -1,0 +1,277 @@
+head	1.13;
+access;
+symbols;
+locks
+	eb:1.13; strict;
+comment	@# @;
+expand	@o@;
+
+
+1.13
+date	2015.11.07.10.28.49;	author eb;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2015.11.07.10.26.13;	author eb;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2015.11.07.10.24.58;	author eb;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2015.11.07.10.24.29;	author eb;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2015.11.07.10.23.33;	author eb;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2015.11.07.10.23.12;	author eb;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2015.11.07.10.22.19;	author eb;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2015.11.07.10.22.03;	author eb;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2015.11.07.10.20.30;	author eb;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2015.11.07.10.20.04;	author eb;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2015.11.07.10.19.05;	author eb;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2015.11.07.10.18.55;	author eb;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2015.11.07.10.02.56;	author eb;	state Exp;
+branches;
+next	;
+
+
+desc
+@vim
+@
+
+
+1.13
+log
+@vim
+@
+text
+@my @@sArr = "cat", "dog", "dog", "dog", "dog", "fish", "monkey", "monkey", "chair", "stool";
+my @@tArr = "katt", "hund", "bikkje", "sjefer", "puddel", "fish", "ape", "apekatt", "stol", "stol";
+my %hash;
+
+sub find_incon (@@arr1, @@arr2) {
+   my %hash;
+   # Find inconsistent translations in source/target or target/source
+   loop (my $i=0;$i < @@arr1.elems; $i++){
+      loop (my $j=0;$j < @@arr1.elems; $j++){
+         # not same item && strlen same && identical text content
+         if ($i != $j) && (@@arr1[$i].chars == @@arr1[$j].chars) && (@@arr1[$i] eq @@arr1[$j]) {
+            if @@arr2[$i] ne @@arr2[$j] {
+               if $i <= $j {
+                  say "@@arr2[$i] (index $i) is different from @@arr2[$j] (index $j)";
+                  %hash{$i} = $j;
+               }
+            }
+         }
+      }
+   } 
+   my @@outArr;
+   # Extract related key pairs
+   say %hash.perl;
+   for keys %hash -> $key1 {
+      for keys %hash -> $key2 {
+         if %hash{$key1} == %hash{$key2} && $key1 ne $key2 {
+            my $tmpStr = $key1 ~ $key2 ~ %hash{$key1} ~ %hash{$key2};
+            $tmpStr = $tmpStr.split("").unique.join("");
+            @@outArr.push($tmpStr);
+            %hash{$key1}:delete;
+            %hash{$key2}:delete;
+         }
+      }
+   }
+   # Extract remaining unrelated key pairs
+   for keys %hash -> $key1 {
+      @@outArr.push($key1 ~ %hash{$key1});
+   }
+   # "Indexes $_ in sArr are inconsistent with source equivalent".say for @@outArr;
+   for 0 ..^ @@outArr.elems -> $i {
+      @@outArr[$i] = @@outArr[$i].split("");
+   }
+   return @@outArr;
+}
+
+my @@target_incon = find_incon(@@sArr, @@tArr);
+"Indexes $_ in tArr are inconsistent with source equivalent".say for @@target_incon;
+say @@target_incon.perl;
+say "\n";
+my @@source_incon = find_incon(@@tArr, @@sArr);
+"Indexes $_ in sArr are inconsistent with target equivalent".say for @@source_incon;
+say @@source_incon.perl;
+@
+
+
+1.12
+log
+@vim
+@
+text
+@d1 2
+a2 2
+my @@sArr = "cat", "dog", "dog", "dog", "fish", "monkey", "monkey", "chair", "stool";
+my @@tArr = "katt", "hund", "bikkje", "sjefer", "fish", "ape", "apekatt", "stol", "stol";
+@
+
+
+1.11
+log
+@vim
+@
+text
+@d49 1
+a49 1
+
+@
+
+
+1.10
+log
+@vim
+@
+text
+@d26 1
+a26 1
+         if %hash{$key1} != %hash{$key2} && $key1 ne $key2 {
+@
+
+
+1.9
+log
+@vim
+@
+text
+@d26 1
+a26 1
+         if %hash{$key1} ~~ %hash{$key2} && $key1 !~~ $key2 {
+@
+
+
+1.8
+log
+@vim
+@
+text
+@d46 3
+a48 3
+#my @@target_incon = find_incon(@@sArr, @@tArr);
+#"Indexes $_ in tArr are inconsistent with source equivalent".say for @@target_incon;
+#say @@target_incon.perl;
+@
+
+
+1.7
+log
+@vim
+@
+text
+@d46 3
+a48 3
+my @@target_incon = find_incon(@@sArr, @@tArr);
+"Indexes $_ in tArr are inconsistent with source equivalent".say for @@target_incon;
+say @@target_incon.perl;
+@
+
+
+1.6
+log
+@vim
+@
+text
+@d46 3
+a48 3
+#my @@target_incon = find_incon(@@sArr, @@tArr);
+#"Indexes $_ in tArr are inconsistent with source equivalent".say for @@target_incon;
+#say @@target_incon.perl;
+@
+
+
+1.5
+log
+@vim
+@
+text
+@d46 3
+a48 3
+my @@target_incon = find_incon(@@sArr, @@tArr);
+"Indexes $_ in tArr are inconsistent with source equivalent".say for @@target_incon;
+say @@target_incon.perl;
+@
+
+
+1.4
+log
+@vim
+@
+text
+@d23 1
+a23 1
+   %hash.perl;
+@
+
+
+1.3
+log
+@vim
+@
+text
+@d23 1
+@
+
+
+1.2
+log
+@vim
+@
+text
+@d25 1
+a25 1
+         if (%hash{$key1} ~~ %hash{$key2}) && ($key1 !~~ $key2) {
+@
+
+
+1.1
+log
+@vim
+@
+text
+@d25 1
+a25 1
+         if %hash{$key1} ~~ %hash{$key2} && $key1 !~~ $key2 {
+@
