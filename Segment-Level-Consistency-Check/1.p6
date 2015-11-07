@@ -38,8 +38,7 @@ for keys %hash -> $key1 {
    for keys %hash -> $key2 {
       if %hash{$key1} ~~ %hash{$key2} && $key1 !~~ $key2 {
          my $tmpStr = $key1 ~ $key2 ~ %hash{$key1} ~ %hash{$key2};
-         $tmpStr = $tmpStr.split("").unique.join("");
-         @outArr.push($tmpStr);
+         @outArr.push($tmpStr.split("").unique);
          %hash{$key1}:delete;
          %hash{$key2}:delete;
       }
