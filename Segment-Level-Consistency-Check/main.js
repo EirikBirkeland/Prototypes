@@ -3,17 +3,24 @@
 var sArr = ["cat", "dog", "dog", "dog", "dog", "fish", "monkey", "monkey", "chair", "stool"];
 var tArr = ["katt", "hund", "bikkje", "sjefer", "puddel", "fish", "ape", "apekatt", "stol", "stol"];
 
-findInconsistent(sArr, tArr);
+//var sArr = ["katt", "dog", "dog"];
+//var tArr = ["katt", "hund", "bikkje"];
 
-function arrayUnique (a) {
-  return a.reduce(function(p, c) {
-    if (p.indexOf(c) < 0) p.push(c);
-    return p;
-  }, []);
+console.log("Final output is " + findInconsistent(sArr, tArr));
+
+Array.prototype.getUnique = function(){
+   var u = {}, a = [];
+   for(var i = 0, l = this.length; i < l; ++i){
+      if(u.hasOwnProperty(this[i])) {
+         continue;
+      }
+      a.push(this[i]);
+      u[this[i]] = 1;
+   }
+   return a;
 }
 
 function findInconsistent(arr1, arr2) {
-
   var obj = {};
   // Find inconsistent translations in source/target or target/source
   for (var i = 0; i < arr1.length; i++) {
@@ -29,27 +36,52 @@ function findInconsistent(arr1, arr2) {
       }
     }
   }
-  var outArr = [];
-  // Extract related key pairs
+  console.log("The object's content is: ");
   console.log(obj);
-  for (let key1 of Object.keys(obj)) {
-    for (let key2 of Object.keys(obj)) {
-      if (obj[key1] == obj[key2] && key1 != key2) {
-        var tmpStr = key1 + key2 + obj[key1] + obj[key2];
-        tmpStr = arrayUnique(tmpStr.split("")).join("");
-        outArr.push(tmpStr);
-        delete obj[key1];
-        delete obj[key2];
+  
+  var outArr = [];
+  // Move to array:
+  for (let key of Object.keys(obj)) {
+    outArr.push([key, String(obj[key])]);
+  }
+  console.log(outArr);
+
+  outArr = mergeArrays(outArr);
+  outArr[0] = arrayUnique(outArr[0]);
+  return outArr;
+}
+
+// set aside for now
+
+// GOOD
+function arrayUnique(a) { // IN ["12", "12"]
+  return a.reduce(function(p, c) {
+    if (p.indexOf(c) < 0) p.push(c);
+    return p;
+  }, []);
+} // OUT ["12"]
+
+// GOOD
+function mergeArrays(AoA) { // Merge arrays with any common items
+  if (!AoA instanceof Array) throw (AoA + " is not an array!");
+  //AoA is [[1,2], [2,3], [1,4]]
+  for (let i = 0; i < AoA.length; i++) {
+    for (let j = 0; j < AoA.length; j++) {
+      if (i != j && anyMatch(AoA[i], AoA[j])) {
+        AoA[i] = AoA[i].concat(AoA[j]); // ok
+        AoA.splice(j, 1); // ok
       }
     }
   }
-  // Extract remaining unrelated key pairs
-  for (let key1 of Object.keys(obj)) {
-    outArr.push(key1 + obj[key1]);
+  // AoA = arrayUnique(AoA); //Output should be [[1,2,3,4]]
+  return AoA;
+
+  function anyMatch(arr1, arr2) {
+    for (let i = 0; i < arr1.length; i++) {
+      for (let j = 0; j < arr2.length; j++) {
+        if (arr1[i] == arr2[j]) return true;
+      }
+    }
+    return false;
   }
-  // "Indexes _ in sArr are inconsistent with source equivalent".console.log for outArr;
-  for (let i = 0; i < outArr.length; i++) {
-    outArr[i] = outArr[i].split("");
-  }
-  return outArr;
 }
